@@ -1,0 +1,58 @@
+{
+  "xai": {
+    "file": "xai.svg",
+    "brandHex": "#000000",
+    "type": "mark",
+    "monochrome": true,
+    "source": "https://svgl.app/library/xai_light.svg",
+    "confidence": "high"
+  },
+  "crusoe": {
+    "file": "crusoe.svg",
+    "brandHex": "#00A651",
+    "type": "wordmark",
+    "monochrome": true,
+    "source": "https://cdn.prod.website-files.com/6855c1aa175582ee23e0aa19/68762899486863fd46acd673_logo-footer.svg",
+    "confidence": "high"
+  },
+  "anthropic": {
+    "file": "anthropic.svg",
+    "brandHex": "#191919",
+    "type": "mark",
+    "monochrome": true,
+    "source": "https://svgl.app/library/anthropic_black.svg",
+    "confidence": "high"
+  },
+  "sierra": {
+    "file": "sierra.svg",
+    "brandHex": "#14673A",
+    "type": "mark",
+    "monochrome": true,
+    "source": "https://sierra.ai/icon.svg",
+    "confidence": "high"
+  },
+  "legora": {
+    "file": "legora.svg",
+    "brandHex": "#005032",
+    "type": "wordmark",
+    "monochrome": true,
+    "source": "https://framerusercontent.com/images/y4dDNSLl5ofNEicU6irKeZsehSE.svg",
+    "confidence": "high"
+  },
+  "openai": {
+    "file": "openai.svg",
+    "brandHex": "#000000",
+    "type": "mark",
+    "monochrome": true,
+    "source": "https://svgl.app/library/openai.svg",
+    "confidence": "high"
+  },
+  "vercel": {
+    "file": "vercel.svg",
+    "brandHex": "#000000",
+    "type": "mark",
+    "monochrome": true,
+    "source": "https://svgl.app/library/vercel.svg",
+    "confidence": "high"
+  }
+}

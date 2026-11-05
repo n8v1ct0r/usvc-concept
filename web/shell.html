@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>USVC for iOS, an unofficial concept</title>
+<meta name="description" content="A concept iPhone app for usvc.com, running in your browser. Unofficial concept. Not affiliated with USVC. Sample data only.">
+<meta name="theme-color" content="#0B0B0C">
+<link rel="icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap" rel="stylesheet">
+<script>
+  // Inside the phone the app owns "/". If the app ever reloads at "/", hand it back to the app.
+  if (window.self !== window.top) location.replace('/?app=1');
+</script>
+<style>
+  :root {
+    --stage: #05162C;
+    --ink: #FFFFFF;
+    --ink-2: #A6B5C9;
+    --ink-3: #8E9DB3;
+    --line: #1C3559;
+    --accent: #7C9EFF;
+    --bezel: #0B0B0C;
+    --strip-h: 32px;
+    --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --serif: "Newsreader", ui-serif, "New York", Georgia, serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--stage);
+    color: var(--ink);
+    font: 400 16px/1.5 var(--sans);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  ::selection { background: rgba(124, 158, 255, 0.35); color: #FFFFFF; }
+  a { color: inherit; text-underline-offset: 3px; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+  /* Shared honesty strip (nate-victor/shared/STRIP.md) */
+  [data-honesty-strip] {
+    position: fixed; inset: 0 0 auto 0; height: var(--strip-h); z-index: 10;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 16px;
+    background: #0B0B0C; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(237, 237, 237, 0.72);
+    font: 400 11px/1 var(--mono); text-transform: uppercase; letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+  [data-honesty-strip] a { text-decoration: none; color: inherit; }
+  [data-honesty-strip] a:hover { color: #EDEDED; }
+  .strip-mid { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .strip-label { display: inline-flex; align-items: center; gap: 8px; }
+  .strip-dot { width: 6px; height: 6px; border-radius: 50%; background: #9B8CFF; }
+
+  /* Stage */
+  .stage {
+    position: fixed; inset: var(--strip-h) 0 0 0;
+    display: grid; place-items: center;
+    background: var(--stage);
+  }
+  .layout {
+    display: grid; grid-template-columns: minmax(0, 340px) auto; align-items: center;
+    gap: clamp(48px, 7vw, 112px);
+  }
+
+  .aside h1 {
+    margin: 0; font: 600 44px/1.04 var(--sans); letter-spacing: -0.025em; text-wrap: balance;
+  }
+  .aside h1 em { font: italic 400 1.06em/1 var(--serif); letter-spacing: -0.01em; }
+  .lede { margin: 20px 0 0; color: var(--ink-2); max-width: 32ch; }
+  .unofficial {
+    margin: 16px 0 0; color: var(--ink); font-weight: 600;
+  }
+  .try { margin: 36px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+  .try li {
+    display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start;
+    padding: 14px 0; border-bottom: 1px solid var(--line); color: var(--ink-2);
+  }
+  .try li strong { color: var(--ink); font-weight: 600; }
+  .try svg { width: 22px; height: 22px; margin-top: 1px; stroke: var(--accent); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .btn {
+    appearance: none; cursor: pointer; border-radius: 999px; padding: 10px 16px;
+    font: 600 14px/1 var(--sans); letter-spacing: -0.005em;
+    border: 1px solid var(--line); background: transparent; color: var(--ink);
+    transition: background-color 160ms cubic-bezier(0.22, 1, 0.36, 1), border-color 160ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn:hover { background: rgba(255, 255, 255, 0.06); border-color: #2A4A78; }
+  .btn.primary { background: #FFFFFF; color: #05162C; border-color: #FFFFFF; }
+  .btn.primary:hover { background: #E8ECF2; }
+  .fine { margin: 20px 0 0; color: var(--ink-3); font-size: 14px; max-width: 34ch; }
+
+  /* Phone */
+  .phone-wrap { width: calc(414px * var(--s, 1)); height: calc(892px * var(--s, 1)); }
+  .phone {
+    width: 414px; height: 892px; padding: 12px; border-radius: 66px;
+    background: var(--bezel);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.10),
+      inset 0 0 0 4px #1A1A1C,
+      0 40px 80px -20px rgba(0, 0, 0, 0.55),
+      0 18px 36px -18px rgba(0, 0, 0, 0.6);
+    transform-origin: top left; transform: scale(var(--s, 1));
+    animation: rise 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes rise { from { translate: 0 18px; opacity: 0.001; filter: blur(6px); } to { translate: 0 0; opacity: 1; filter: blur(0); } }
+  @media (prefers-reduced-motion: reduce) { .phone { animation: none; } }
+  .screen {
+    position: relative; width: 390px; height: 868px; border-radius: 54px; overflow: hidden;
+    background: var(--sb-bg, #FFFFFF); display: flex; flex-direction: column;
+  }
+  .statusbar {
+    height: 24px; flex: none; display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 30px 0 46px; color: var(--sb-ink, #05162C);
+    font: 600 15px/1 var(--sans); letter-spacing: -0.01em;
+  }
+  .statusbar svg { display: block; fill: currentColor; }
+  .sb-icons { display: flex; gap: 6px; align-items: center; }
+  iframe { display: block; border: 0; width: 390px; height: 844px; background: transparent; }
+
+  /* Tablet and small laptop: phone only, controls under it */
+  @media (max-width: 1000px) {
+    .layout { grid-template-columns: auto; gap: 20px; justify-items: center; }
+    .aside { order: 2; text-align: center; }
+    .aside h1, .lede, .try, .fine { display: none; }
+    .unofficial { margin: 0; }
+    .controls { justify-content: center; margin-top: 12px; }
+  }
+
+  /* Phone: the app fills the screen under the strip */
+  @media (max-width: 600px) {
+    .strip-mid { display: none; }
+    .stage { display: block; place-items: normal; background: var(--stage); }
+    .layout { display: block; width: 100%; height: 100%; }
+    .aside { display: none; }
+    .phone-wrap { width: 100%; height: 100%; }
+    .phone { width: 100%; height: 100%; padding: 0; border-radius: 0; box-shadow: none; transform: none; animation: none; background: transparent; }
+    .screen { width: 100%; height: 100%; border-radius: 0; }
+    .statusbar { display: none; }
+    iframe { width: 100%; height: 100%; }
+  }
+</style>
+</head>
+<body>
+  <div data-honesty-strip title="DEMO: sample content in a real app build. Unofficial concept. Not affiliated with USVC. No money moves and nothing is sent anywhere.">
+    <a href="https://nate-victor.com">Nate Victor / Sidequest 06</a>
+    <span class="strip-mid">USVC for iOS · Unofficial concept. Not affiliated with USVC.</span>
+    <span class="strip-label"><span class="strip-dot" aria-hidden="true"></span>Demo · sample data</span>
+  </div>
+
+  <main class="stage">
+    <div class="layout">
+      <section class="aside" aria-labelledby="title">
+        <h1 id="title">USVC for <em>iOS.</em></h1>
+        <p class="lede">A concept iPhone app for usvc.com. This is the real React Native build, running in your browser.</p>
+        <p class="unofficial">Unofficial concept. Not affiliated with USVC.</p>
+        <ul class="try" aria-label="Try this">
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h12M12 6l6 6-6 6"/></svg>
+            <span><strong>Tap Sign in</strong> to jump to Home.</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3M9 9v1M15 9v1M12 9v4h-1M9 16c1.7 1.3 4.3 1.3 6 0"/></svg>
+            <span><strong>Tap +</strong>, pick an amount, and confirm with Face ID.</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v16" /><path d="M12 4a8 8 0 0 1 0 16z" fill="#7C9EFF" stroke="none"/></svg>
+            <span><strong>Tap the half circle</strong> on Home for dark mode.</span>
+          </li>
+        </ul>
+        <div class="controls">
+          <button class="btn primary" type="button" data-action="home">Skip to Home</button>
+          <button class="btn" type="button" data-action="restart">Start over</button>
+        </div>
+        <p class="fine">Sample data only. No money moves. Nothing you tap is sent anywhere.</p>
+      </section>
+
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="screen">
+            <div class="statusbar" aria-hidden="true">
+              <span>9:41</span>
+              <span class="sb-icons">
+                <svg width="18" height="11" viewBox="0 0 18 11"><rect x="0" y="7" width="3" height="4" rx="0.8"/><rect x="5" y="5" width="3" height="6" rx="0.8"/><rect x="10" y="2.5" width="3" height="8.5" rx="0.8"/><rect x="15" y="0" width="3" height="11" rx="0.8"/></svg>
+                <svg width="16" height="11" viewBox="0 0 16 11"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.1-1.2A10.2 10.2 0 0 0 8 .6 10.2 10.2 0 0 0 .9 3.4L2 4.6a8.6 8.6 0 0 1 6-2.4Zm0 3.2c1.4 0 2.7.5 3.7 1.4l1.1-1.2A7 7 0 0 0 8 3.8a7 7 0 0 0-4.8 1.8l1.1 1.2c1-.9 2.3-1.4 3.7-1.4Zm0 3.2c.6 0 1.1.2 1.5.6L8 10.8 6.5 9.2c.4-.4.9-.6 1.5-.6Z"/></svg>
+                <svg width="27" height="12" viewBox="0 0 27 12"><rect x="0.5" y="0.5" width="23" height="11" rx="3.2" fill="none" stroke="currentColor" opacity="0.4"/><rect x="2" y="2" width="20" height="8" rx="2"/><path d="M25 4v4c.8-.3 1.4-1.1 1.4-2s-.6-1.7-1.4-2Z" opacity="0.45"/></svg>
+              </span>
+            </div>
+            <iframe id="app" src="/?app=1" title="USVC for iOS app, sample data" allow="clipboard-write"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var frame = document.getElementById('app');
+
+    // Scale the phone to fit the window height on shorter laptop screens.
+    function fit() {
+      if (window.innerWidth <= 600) { root.style.removeProperty('--s'); return; }
+      var avail = window.innerHeight - 32 - 48 - (window.innerWidth <= 1000 ? 96 : 0);
+      var s = Math.min(1, Math.max(0.6, avail / 892));
+      root.style.setProperty('--s', s.toFixed(3));
+    }
+    fit();
+    window.addEventListener('resize', fit);
+
+    // Status bar follows the app theme: saved choice first, then the system setting.
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function read(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
+    function write(key, value) { try { if (value === null) localStorage.removeItem(key); else localStorage.setItem(key, value); } catch (e) {} }
+    function paint() {
+      var t = read('usvc.theme');
+      var dark = t ? t === 'dark' : mq.matches;
+      root.style.setProperty('--sb-bg', dark ? '#05162C' : '#FFFFFF');
+      root.style.setProperty('--sb-ink', dark ? '#FFFFFF' : '#05162C');
+    }
+    paint();
+    window.addEventListener('storage', paint);
+    if (mq.addEventListener) mq.addEventListener('change', paint);
+
+    function reload() { frame.src = '/?app=1&t=' + Date.now(); }
+    document.querySelector('[data-action="home"]').addEventListener('click', function () { write('usvc.onboarded', '1'); reload(); });
+    document.querySelector('[data-action="restart"]').addEventListener('click', function () { write('usvc.onboarded', null); reload(); });
+  })();
+</script>
+</body>
+</html>

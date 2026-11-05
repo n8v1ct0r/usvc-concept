@@ -1,0 +1,56 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# local env files
+.env
+.env*.local
+
+# typescript
+*.tsbuildinfo
+
+# eval harness transient output (run.sh regenerates; evals.json is the committed result)
+evals/evals/
+
+example
+
+# design recon / working screenshots (not product)
+usvc-ios-design/
+
+# generated native folders
+/ios
+/android
+
+# archived eval harness transient output
+archive/**/evals/evals/
+e2e/build/
+.gstack/
+/build/

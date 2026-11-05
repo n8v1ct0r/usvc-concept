@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "routes": [
+    { "src": "^/_expo/(.*)$", "headers": { "cache-control": "public, max-age=31536000, immutable" }, "continue": true },
+    { "src": "^/$", "has": [{ "type": "query", "key": "app" }], "dest": "/index.html" },
+    { "src": "^/$", "dest": "/shell.html" },
+    { "handle": "filesystem" },
+    { "src": "^/company/([^/]+)/?$", "dest": "/company/[id].html" },
+    { "src": "^/(.+?)/?$", "dest": "/$1.html" }
+  ]
+}
